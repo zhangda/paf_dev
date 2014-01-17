@@ -3,14 +3,14 @@ var Category = require('../models/category')
 
 exports.post = function(req, res){
   var api = new Api(req.body)
-  Category.findOne({'_id':req.body._category}, function(err,category){
+  Category.findById(req.body._category, function(err,category){
     if(err) return res.json({err:err})
-    api.save(function(err){
+    api.save(function(err, api){
        if(err) return res.json({err:err})
        category.apis.push(api)
-       category.save(function(err){
+       category.save(function(err, category){
          if(err) return res.json({err:err})
-         return res.json({ok:'ok'})
+         return res.json(api)
        })
     })  
   })
@@ -24,9 +24,29 @@ exports.get = function(req, res){
 }
 
 exports.remove = function(req,res){
-  Api.remove({'key':req.params.key}, function(err,api){
+  Api.findByIdAndRemove(req.params.id, function(err,api){
     if(err) return res.json({err:err})
-    return res.json({ok:'ok'})
+    return res.json(api)
     })
 }
 
+exports.list = function(req,res){
+  Api.find().select('name key').exec(function(err,apis){
+    if(err) return res.json({err:err})
+    return res.json(apis)
+  })
+}
+
+exports.update = function(req,res){
+  Api.findByIdAndUpdate(req.params.id, req.body, function(err, api){
+    if(err) return res.json({err:err})
+    return res.json(api)
+  })
+}
+
+exports.query = function(req, res){
+  Api.find(req.query, function(err, apis){
+    if(err) return res.json({err:err})
+    return res.json(apis)
+  })
+}
