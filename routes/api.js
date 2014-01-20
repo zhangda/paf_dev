@@ -44,9 +44,26 @@ exports.update = function(req,res){
   })
 }
 
+/*
 exports.query = function(req, res){
   Api.find(req.query, function(err, apis){
     if(err) return res.json({err:err})
     return res.json(apis)
   })
 }
+*/
+
+
+exports.query = function(req, res){
+  var queryString = []
+  for(var i in req.query){
+    var item ={};
+    item[i] =req.query[i];
+    queryString.push(item);
+  }
+  Api.find({$or:queryString}, function(err, apis){
+    if(err) return res.json({err:err})
+    return res.json(apis)
+  })  
+}
+

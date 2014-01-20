@@ -41,11 +41,25 @@ exports.update = function(req,res){
   })
 }
 
+/*
 exports.query = function(req,res){
   Category.find(req.query, function(err, categories){
     if(err) return res.json({err:err})
     return res.json(categories)
   })
 }
+*/
 
+exports.query = function(req, res){
+  var queryString = []
+  for(var i in req.query){
+   var item ={};
+   item[i] =req.query[i];
+   queryString.push(item);
+  }
+  Category.find({$or:queryString}, function(err, categories){
+    if(err) return res.json({err:err})
+    return res.json(categories)
+  })
+}
 
