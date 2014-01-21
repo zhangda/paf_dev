@@ -44,15 +44,15 @@ app.get('/categories', category.list)
 app.post('/category', category.post)
 //app.get('/category/:key', category.get)
 app.get('/category/query', category.query)
-app.del('/category/:id', category.remove)
-app.put('/category/:id', category.update)
+app.del('/category/:key', category.remove)
+app.put('/category/:key', category.update)
 
 app.get('/apis', api.list)
 app.post('/api', api.post)
 //app.get('/api/:key', api.get)
 app.get('/api/query', api.query)
-app.del('/api/:id', api.remove)
-app.put('/api/:id', api.update)
+app.del('/api/:key', api.remove)
+app.put('/api/:key', api.update)
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
