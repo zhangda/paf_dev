@@ -24,7 +24,7 @@ exports.get = function(req, res){
 }
 
 exports.remove = function(req,res){
-  Api.remove({key:req.params.key}, function(err,api){
+  Api.findByIdAndRemove(req.params.id, function(err,api){
     if(err) return res.json({err:err})
     return res.json(api)
     })
@@ -38,7 +38,7 @@ exports.list = function(req,res){
 }
 
 exports.update = function(req,res){
-  Api.update({key:req.params.key}, req.body, function(err, api){
+  Api.findByIdAndUpdate(req.params.id, req.body, function(err, api){
     if(err) return res.json({err:err})
     return res.json(api)
   })

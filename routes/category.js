@@ -16,11 +16,11 @@ exports.list = function(req, res){
 }
 
 exports.remove = function(req, res){
-  Category.findOne({key:req.params.key})
+  Category.findById(req.params.id)
    .populate({path:'apis', select:'_id'}).exec(function(err,category){
      if(err) return res.json({err:err})
      if(category.apis.length>0) return res.json({err:'category is not empty'})
-     Category.remove({key:req.params.key}, function(err,category){
+     Category.findByIdAndRemove(req.params.id, function(err,category){
        if(err) return res.json({err:err})
        return res.json(category)
      })
@@ -35,7 +35,7 @@ exports.get = function(req, res){
 }
 
 exports.update = function(req,res){
-  Category.update({key:req.params.key}, req.body, function(err, category){
+  Category.findByIdAndUpdate(req.params.id, req.body, function(err, category){
     if(err) return res.json({err:err})
     return res.json(category)
   })
