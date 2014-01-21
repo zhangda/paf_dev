@@ -3,14 +3,14 @@ var Api = require('../models/api.js')
 
 exports.post = function(req, res){
   new Category(req.body).save(function(err, category){
-    if(err) return res.json({err:err})
+    if(err) return res.json(400,{info:{code:'',message:err.err}})
     return res.json(category)
   })
 }
 
 exports.list = function(req, res){
   Category.find().populate({path:'apis',select:'name key'}).exec(function(err,categories){
-    if(err) return res.json({err:err})
+    if(err) return res.json(400,{info:{code:'',message:err.err}})
     return res.json(categories)
   })
 }
@@ -18,10 +18,11 @@ exports.list = function(req, res){
 exports.remove = function(req, res){
   Category.findById(req.params.id)
    .populate({path:'apis', select:'_id'}).exec(function(err,category){
-     if(err) return res.json({err:err})
-     if(category.apis.length>0) return res.json({err:'category is not empty'})
+     if(err) return res.json(400,{info:{code:'',message:err.err}})
+     if(category.apis.length>0) return
+     res.json(400,{info:{code:'',message:'category is not empty'}})
      Category.findByIdAndRemove(req.params.id, function(err,category){
-       if(err) return res.json({err:err})
+       if(err) return res.json(400,{info:{code:'',message:err.err}})
        return res.json(category)
      })
   })
@@ -29,14 +30,14 @@ exports.remove = function(req, res){
 
 exports.get = function(req, res){
   Category.findOne({'key':req.params.key}).exec(function(err,category){
-    if(err) return res.json({err:err})
+    if(err) return res.json(400,{info:{code:'',message:err.err}})
     return res.json(category)
   })
 }
 
 exports.update = function(req,res){
   Category.findByIdAndUpdate(req.params.id, req.body, function(err, category){
-    if(err) return res.json({err:err})
+    if(err) return res.json(400,{info:{code:'',message:err.err}})
     return res.json(category)
   })
 }
@@ -58,7 +59,7 @@ exports.query = function(req, res){
    queryString.push(item);
   }
   Category.find({$or:queryString}, function(err, categories){
-    if(err) return res.json({err:err})
+    if(err) return res.json(400,{info:{code:'',message:err.err}})
     return res.json(categories)
   })
 }
