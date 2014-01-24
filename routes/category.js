@@ -19,12 +19,13 @@ exports.remove = function(req, res){
   Category.findById(req.params.id)
    .populate({path:'apis', select:'_id'}).exec(function(err,category){
      if(err) return res.json(400,{info:{code:'',message:err.err}})
-     if(category.apis.length>0) return
-     res.json(400,{info:{code:'',message:'category is not empty'}})
-     Category.findByIdAndRemove(req.params.id, function(err,category){
+     if(category.apis.length>0){
+       return res.json(400,{info:{code:'',message:'category is not empty'}})
+     } else {
+       Category.findByIdAndRemove(req.params.id, function(err,category){
        if(err) return res.json(400,{info:{code:'',message:err.err}})
        return res.json(category)
-     })
+     })}
   })
 }
 
