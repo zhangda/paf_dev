@@ -1,8 +1,10 @@
 var formidable = require('formidable')
- 
+var path = require('path')
+
 exports.post = function(req, res){
   var form = new formidable.IncomingForm();
-  var upload_dir = "public/download/"
+  appDir = path.dirname(require.main.filename);
+  var upload_dir = appDir + '/public/download/'
   form.on('error', function(err) { 
     return res.json(400,{code:'',message:err})
   })
